@@ -1,1 +1,1 @@
-# Duelyst-2-Wiki
+# Duelyst 2 Patch History
