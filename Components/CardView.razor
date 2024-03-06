@@ -1,0 +1,98 @@
+﻿﻿@using DuelystPatchNotes.Models
+@using System.Globalization;
+
+<div class="card-container">
+    <div class=@GetStylingForLeftSide()>
+        <div class="card-mana">
+            <span>@CardData.Mana</span>
+        </div>
+        <div class="card-rarity">
+            <img style="width: 40px;" src=@GetRarityURL() />
+        </div>
+        <div class="card-attack">
+            <span>@CardData.Attack</span>
+        </div>
+        <div class="card-health">
+            <span>@CardData.Health</span>
+        </div>
+    </div>
+    <div class="card-right">
+        <div class="card-set"></div>
+        <div class="card-rotation"></div>
+        <div class="card-image">
+            <img class="@GetImageStyling()" src=@BuildSpriteURL() />
+        </div>
+        <div class="card-title">
+            <h2 class="legend-name">
+                <a class="legend-post-title">
+                    @CardData.Name
+                </a>
+            </h2>
+        </div>
+        <div class="card-type">@CardData.CardType</div>
+        <div class="card-description">@CardData.Description</div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public CardData CardData { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (this.CardData == null)
+        {
+            CardData = new()
+                {
+                    Mana = 2,
+                    Name = "void Pulse",
+                    Description = "blah blah blah",
+
+                };
+        }
+    }
+
+    string BuildSpriteURL()
+    {
+        string cardNameFormatted = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CardData.Name).Replace(" ", "-");
+        string url = "https://api.duelyst2.com/" + GetAnimationPath();
+        Console.WriteLine("url: " + url);
+        return url;
+    }
+
+    string GetAnimationPath()
+    {
+        if (CardData.CardType == "Minion" || CardData.CardType == "General")
+        {
+            return CardData.Resource.Breathing;
+        }
+        else
+        {
+            return CardData.Resource.Idle;
+        }
+    }
+
+    string GetImageStyling()
+    {
+        string cardType = CardData.CardType.ToLower();
+
+        if(cardType == "general")
+        {
+            cardType = "minion";
+        }
+
+        return cardType;
+    }
+
+    string GetStylingForLeftSide()
+    {
+        string styleString = CardData.CardType == "General" ? "stat-spacing" : "";
+        return $"card-left {styleString}";
+    }
+
+    string GetRarityURL()
+    {
+        return $"./Assets/CardIcons/rarity-{CardData.Rarity}.png";
+    }
+}

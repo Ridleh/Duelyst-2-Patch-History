@@ -1,0 +1,169 @@
+﻿@page "/cards"
+@inject HttpClient Http
+
+@using DuelystPatchNotes.Models
+@using DuelystPatchNotes.Services
+@using DuelystPatchNotes.Components
+
+<div id="background" class="hero-content">
+    <div class="section-inner">
+        <div class="hero-content-text-wrapper">
+            <h2 class="hero-content-title"> Duelyst 2 CARDS</h2>
+            @if(SelectedPatch != null)
+            {
+                <h5 class="hero-content-title">PATCH @SelectedPatch.Version</h5>
+            }
+        </div>
+    </div>
+</div>
+<div class="card-nav">
+    <ul>
+        <li>
+            <a onclick="document.getElementById('Lyonar').scrollIntoView({behavior:'smooth'})">Lyonar</a>
+        </li>
+        <li>
+            <a onclick="document.getElementById('Songhai').scrollIntoView({behavior:'smooth'})">Songhai</a>
+        </li>
+        <li>
+            <a onclick="document.getElementById('Vetruvian').scrollIntoView({behavior:'smooth'})">Vetruvian</a>
+        </li>
+        <li>
+            <a onclick="document.getElementById('Abyssian').scrollIntoView({behavior:'smooth'})">Abyssian</a>
+        </li>
+        <li>
+            <a onclick="document.getElementById('Magmar').scrollIntoView({behavior:'smooth'})">Magmar</a>
+        </li>
+        <li>
+            <a onclick="document.getElementById('Vanar').scrollIntoView({behavior:'smooth'})">Vanar</a>
+        </li>
+        <li>
+            <a onclick="document.getElementById('Neutral').scrollIntoView({behavior:'smooth'})">Neutral</a>
+        </li>
+    </ul>
+</div>
+<div class="cards">
+    @if(AllCardsSorted != null)
+    {
+        @foreach(var factionCards in AllCardsSorted)
+        {
+            if(factionCards.Count() == 0)
+            {
+                Console.WriteLine("no data, skipping");
+                continue;
+            }
+
+            CardData sampleCard = factionCards.ElementAt(0);
+            <h1 id=@GetSectionID(sampleCard) class="faction-header">
+                <img src=@GetFactionIcon(sampleCard) />
+                @GetFactionName(sampleCard)
+            </h1>
+            <div class="card-group">
+                @foreach(var card in factionCards)
+                {
+                    <CardView CardData=card/>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <img style="width: 300px; image-rendering: -moz-crisp-edges;" 
+        src="./Assets/Gifs/Loading/Fog_run.gif"/>
+        <h2 style="color: #ffffff;">Fetching Cards...</h2> 
+    }
+</div>
+
+
+
+@code {
+
+    List<CardData> LyonarCards;
+    List<CardData> SonghaiCards;
+    List<CardData> VetruvianCards;
+    List<CardData> AbyssianCards;
+    List<CardData> MagmarCards;
+    List<CardData> VanarCards;
+    List<CardData> NeutralCards;
+    List<CardData> FetchedCards;
+    List<List<CardData>> AllCardsSorted;
+
+    Patch SelectedPatch;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Patch[] patches = await Http.GetFromJsonAsync<Patch[]>("PatchData/Patches.json");
+
+
+        if(patches.Length == 0)
+        {
+            return;
+        }
+
+        SelectedPatch = patches[0];
+        CardData[] FetchedCards = await Http.GetFromJsonAsync<CardData[]>($"PatchData/{SelectedPatch.Version}.json");
+        Console.WriteLine(FetchedCards.Length);
+
+        LyonarCards = FetchedCards.Where(card => card.Faction == Faction.Lyonar).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
+        SonghaiCards = FetchedCards.Where(card => card.Faction == Faction.Songhai).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
+        VetruvianCards = FetchedCards.Where(card => card.Faction == Faction.Vetruvian).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
+        AbyssianCards = FetchedCards.Where(card => card.Faction == Faction.Abyssian).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
+        MagmarCards = FetchedCards.Where(card => card.Faction == Faction.Magmar).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
+        VanarCards = FetchedCards.Where(card => card.Faction == Faction.Vanar).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
+        NeutralCards = FetchedCards.Where(card => card.Faction == Faction.Neutral).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
+        AllCardsSorted = new List<List<CardData>>()
+        {
+            LyonarCards, SonghaiCards, VetruvianCards, AbyssianCards, MagmarCards, VanarCards, NeutralCards
+        };
+
+        Console.WriteLine(AbyssianCards.Count());
+        Console.WriteLine(AbyssianCards.ElementAt(0).Name);
+    }
+
+    string GetFactionIcon(CardData sampleCard)
+    {
+        string basePath = "./Assets/Images/Crests/";
+        return sampleCard.Faction switch
+        {
+            Faction.Lyonar => basePath + "lyonar_crest_2x.png",
+            Faction.Songhai => basePath + "songhai_crest_2x.png",
+            Faction.Vetruvian => basePath + "vetruvian_crest_2x.png",
+            Faction.Abyssian => basePath + "abyssian_crest_2x.png",
+            Faction.Magmar => basePath + "magmar_crest_2x.png",
+            Faction.Vanar => basePath + "vanar_crest_2x.png",
+            Faction.Neutral => basePath + "crest_neutral.png",
+            _ => basePath + "lyonar_crest_2x.png"
+        };
+    }
+
+    string GetFactionName(CardData sampleCard)
+    {
+        return sampleCard.Faction switch
+        {
+            Faction.Lyonar => "LYONAR KINGDOMS",
+            Faction.Songhai => "SONGHAI EMPIRE",
+            Faction.Vetruvian => "VETRUVIAN IMPERIUM",
+            Faction.Abyssian => "ABYSSIAN HOST",
+            Faction.Magmar => "MAGMAR ASPECTS",
+            Faction.Vanar => "VANAR KINDRED",
+            Faction.Neutral => "NEUTRAL",
+            _ => ""
+        };
+    }
+
+    string GetSectionID(CardData sampleCard)
+    {
+        return sampleCard.Faction switch
+        {
+            Faction.Lyonar => "Lyonar",
+            Faction.Songhai => "Songhai",
+            Faction.Vetruvian => "Vetruvian",
+            Faction.Abyssian => "Abyssian",
+            Faction.Magmar => "Magmar",
+            Faction.Vanar => "Vanar",
+            Faction.Neutral => "Neutral",
+            _ => ""
+        };
+    }
+
+
+}
