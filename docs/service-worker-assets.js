@@ -2,11 +2,11 @@
   "assets": [
     {
       "hash": "sha256-k8NfwuwCCeOoFCP+4FuP9FeUzGyohHbIWvOxkXEPg\/w=",
-      "url": "Duelyst-2-Patch-History\/_framework\/blazor.webassembly.js"
+      "url": "_framework\/blazor.webassembly.js"
     },
     {
       "hash": "sha256-Em4vSDFByVyY4UCoBjdI3NJnfZfhp+hdb+DeXpdhKS8=",
-      "url": "Duelyst-2-Patch-History\/_framework\/dotnet.js"
+      "url": "_framework\/dotnet.js"
     },
     {
       "hash": "sha256-54KSaoOArNfygQbV+r4B5y3ys53v2tnvFIyZcZiUmi0=",
