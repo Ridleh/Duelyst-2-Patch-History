@@ -1,16 +1,129 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+@inject HttpClient Http
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+@using DuelystPatchNotes.Models
+@using DuelystPatchNotes.Pages;
+
+<MudThemeProvider />
+
+<MudLayout>
+    <MudAppBar Class="grey darken-4" Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h5" Class="ml-3">DUELYST II - Patch History</MudText>
+    </MudAppBar>
+    <MudDrawer @bind-Open="DrawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        @if (patches != null)
+        {
+            <MudPaper Elevation="0" Class="py-3">
+                <MudNavMenu Bordered="true" Color="Color.Primary">
+                    <MudNavGroup Title="Patch">
+                        @foreach (Patch patch in patches)
+                        {
+                            <MudNavLink  OnClick="@((e) => SelectPatch(patch))">@patch.Version</MudNavLink>
+                        }
+                    </MudNavGroup>
+                    <MudDivider/>
+                    <MudNavGroup Title="Faction">
+                        @foreach (Faction faction in Enum.GetValues(typeof(Models.Faction)).Cast<Models.Faction>())
+                        {
+                            if(faction == Faction.None)
+                            {
+                                continue;
+                            }
+
+                            <MudNavLink OnClick="@((e) => SelectFaction(faction))">@faction.ToString()</MudNavLink>
+                        }
+                    </MudNavGroup>
+                    <MudNavGroup Title="Type">
+                        @foreach (string cardType in CardType.ToList)
+                        {
+                            <MudNavLink OnClick="@((e) => FilterCardType(cardType))">@cardType</MudNavLink>
+                        }
+                    </MudNavGroup>
+                    <MudNavGroup Title="Rarity">
+                        @foreach (string rarity in Rarity.ToList)
+                        {
+                            <MudNavLink OnClick="@((e) => FilterRarity(rarity))">@rarity</MudNavLink>
+                        }
+                    </MudNavGroup>
+                    <MudDivider/>
+                    <MudNavLink>Reset Filters</MudNavLink>
+                </MudNavMenu>
+            </MudPaper>
+        }
+    </MudDrawer>
+    <MudMainContent>
+        @if(selectedPatch != null)
+        {
+            <Cards @ref="cardComponent" SelectedPatch="@selectedPatch" />
+        }
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    protected Cards cardComponent;
+
+    bool DrawerOpen = false;
+    int delay = 600;
+    List<Patch> patches;
+    Patch selectedPatch;
+
+    protected override async Task OnInitializedAsync()
+    {
+        patches = await Http.GetFromJsonAsync<List<Patch>>("./PatchData/Patches.json");
+        selectedPatch = patches[0];
+    }
+
+    void DrawerToggle()
+    {
+        DrawerOpen = !DrawerOpen;
+    }
+
+    void SelectPatch(Patch patch)
+    {
+        DrawerToggle();
+        //add a delay to make it look like we're waiting
+        //for the drawer to close
+        _ = new System.Threading.Timer((_) =>
+        {
+            selectedPatch = patch;
+            _ = cardComponent.ChangePatch(patch);
+        }, null, delay, 0);
+    }
+
+    void SelectFaction(Faction faction)
+    {
+        DrawerToggle();
+        //add a delay to make it look like we're waiting
+        //for the drawer to close
+        _ = new System.Threading.Timer((_) =>
+        {
+            cardComponent.ChangeFaction(faction);
+
+        }, null, delay, 0);
+    }
+
+    void FilterCardType(string cardType)
+    {
+        DrawerToggle();
+        //add a delay to make it look like we're waiting
+        //for the drawer to close
+        _ = new System.Threading.Timer((_) =>
+        {
+            cardComponent.ToggleCardType(cardType);
+        }, null, delay, 0);
+    }
+
+    void FilterRarity(string rarity)
+    {
+        DrawerToggle();
+        //add a delay to make it look like we're waiting
+        //for the drawer to close
+        _ = new System.Threading.Timer((_) =>
+        {
+            cardComponent.ToggleRarity(rarity);
+        }, null, delay, 0);
+    }
+}
+

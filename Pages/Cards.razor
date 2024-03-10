@@ -6,20 +6,26 @@
 @using DuelystPatchNotes.Components
 
 <div id="background" class="hero-content">
+    <video id="background-video" loop autoplay="autoplay" muted poster="./Assets/Images/Backgrounds/Duelyst_Cards_Background.png">
+        <source src="./Assets/Videos/tree_loop.mp4" type="video/mp4">
+        <source src="./Assets/Videos/tree_loop.ogg" type="video/ogg">
+        Your browser does not support the video tag.
+    </video>
     <div class="section-inner">
         <div class="hero-content-text-wrapper">
-            <h2 class="hero-content-title"> Duelyst 2 CARDS</h2>
+            <h5 class="hero-content-title">DUELYST II</h5>
             @if(SelectedPatch != null)
             {
-                <h5 class="hero-content-title">PATCH @SelectedPatch.Version</h5>
+                <h3 class="hero-content-title">Patch @SelectedPatch.Version</h3>
             }
         </div>
     </div>
 </div>
-<div class="card-nav">
+
+<div class="card-nav" style="display:none">
     <ul>
         <li>
-            <a onclick="document.getElementById('Lyonar').scrollIntoView({behavior:'smooth'})">Lyonar</a>
+            <a onclick="document.getElementById('faction-cards-grid').scrollIntoView({behavior:'smooth'})">Lyonar</a>
         </li>
         <li>
             <a onclick="document.getElementById('Songhai').scrollIntoView({behavior:'smooth'})">Songhai</a>
@@ -42,28 +48,19 @@
     </ul>
 </div>
 <div class="cards">
-    @if(AllCardsSorted != null)
+    @if (SelectedCards != null)
     {
-        @foreach(var factionCards in AllCardsSorted)
-        {
-            if(factionCards.Count() == 0)
+        CardData sampleCard = SelectedCards[0];
+        <h1 id="faction-cards-grid" class="faction-header">
+            <img src=@GetFactionIcon(sampleCard) />
+            @GetFactionName(sampleCard)
+        </h1>
+        <div class="card-group">
+            @foreach (var card in SelectedCards)
             {
-                Console.WriteLine("no data, skipping");
-                continue;
+                <CardView CardData=card/>
             }
-
-            CardData sampleCard = factionCards.ElementAt(0);
-            <h1 id=@GetSectionID(sampleCard) class="faction-header">
-                <img src=@GetFactionIcon(sampleCard) />
-                @GetFactionName(sampleCard)
-            </h1>
-            <div class="card-group">
-                @foreach(var card in factionCards)
-                {
-                    <CardView CardData=card/>
-                }
-            </div>
-        }
+        </div>
     }
     else
     {
@@ -77,31 +74,87 @@
 
 @code {
 
-    List<CardData> LyonarCards;
-    List<CardData> SonghaiCards;
-    List<CardData> VetruvianCards;
-    List<CardData> AbyssianCards;
-    List<CardData> MagmarCards;
-    List<CardData> VanarCards;
-    List<CardData> NeutralCards;
-    List<CardData> FetchedCards;
-    List<List<CardData>> AllCardsSorted;
+    [Parameter]
+    public Patch SelectedPatch { get; set; }
 
-    Patch SelectedPatch;
+    [Parameter]
+    public Faction SelectedFaction { get; set; } = Faction.Lyonar;
+
+    private List<CardData> FetchedCards;
+    private List<CardData> SelectedCards;
+
+    private List<CardData> LyonarCards;
+    private List<CardData> SonghaiCards;
+    private List<CardData> VetruvianCards;
+    private List<CardData> AbyssianCards;
+    private List<CardData> MagmarCards;
+    private List<CardData> VanarCards;
+    private List<CardData> NeutralCards;
+
+    private List<string> SelectedCardTypes;
+    private List<string> SelectedRarities;
+
 
     protected override async Task OnInitializedAsync()
     {
-        Patch[] patches = await Http.GetFromJsonAsync<Patch[]>("PatchData/Patches.json");
+        SelectedCardTypes = new List<string>();
+        SelectedRarities = new List<string>();
 
+        await LoadPatchData();
+    }
 
-        if(patches.Length == 0)
+    public async Task ChangePatch(Patch patch)
+    {
+        SelectedPatch = patch;
+        await LoadPatchData();
+        StateHasChanged();
+    }
+
+    public void ChangeFaction(Faction faction)
+    {
+        SelectedFaction = faction;
+        LoadGrid();
+        StateHasChanged();
+    }
+
+    public void ToggleRarity(string rarity)
+    {
+        if (SelectedRarities.Contains(rarity))
+        {
+            SelectedRarities.Remove(rarity);
+        }
+        else
+        {
+            SelectedRarities.Add(rarity);
+        }
+
+        LoadGrid();
+        StateHasChanged();
+    }
+
+    public void ToggleCardType(string cardType)
+    {
+        if (SelectedCardTypes.Contains(cardType))
+        {
+            SelectedCardTypes.Remove(cardType);
+        }
+        else
+        {
+            SelectedCardTypes.Add(cardType);
+        }
+
+        LoadGrid();
+        StateHasChanged();
+    }
+
+    private async Task LoadPatchData()
+    {
+        if (SelectedPatch == null)
         {
             return;
         }
 
-        SelectedPatch = patches[0];
-        CardData[] FetchedCards = await Http.GetFromJsonAsync<CardData[]>($"PatchData/{SelectedPatch.Version}.json");
-        Console.WriteLine(FetchedCards.Length);
+        FetchedCards = await Http.GetFromJsonAsync<List<CardData>>($"PatchData/{SelectedPatch.Version}.json");
 
         LyonarCards = FetchedCards.Where(card => card.Faction == Faction.Lyonar).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
         SonghaiCards = FetchedCards.Where(card => card.Faction == Faction.Songhai).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
@@ -110,13 +163,35 @@
         MagmarCards = FetchedCards.Where(card => card.Faction == Faction.Magmar).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
         VanarCards = FetchedCards.Where(card => card.Faction == Faction.Vanar).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
         NeutralCards = FetchedCards.Where(card => card.Faction == Faction.Neutral).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
-        AllCardsSorted = new List<List<CardData>>()
+
+        LoadGrid();
+    }
+
+    protected void LoadGrid()
+    {
+        List<CardData> cards = SelectedFaction switch
         {
-            LyonarCards, SonghaiCards, VetruvianCards, AbyssianCards, MagmarCards, VanarCards, NeutralCards
+            Faction.Lyonar => LyonarCards,
+            Faction.Songhai => SonghaiCards,
+            Faction.Vetruvian => VetruvianCards,
+            Faction.Abyssian => AbyssianCards,
+            Faction.Magmar => MagmarCards,
+            Faction.Vanar => VanarCards,
+            Faction.Neutral => NeutralCards,
+            _ => null
         };
 
-        Console.WriteLine(AbyssianCards.Count());
-        Console.WriteLine(AbyssianCards.ElementAt(0).Name);
+        if(SelectedCardTypes.Count > 0)
+        {
+            cards = cards.Where(card => SelectedCardTypes.Contains(card.CardType)).ToList();
+        }
+
+        if (SelectedRarities.Count > 0)
+        {
+            cards = cards.Where(card => SelectedRarities.Contains(card.Rarity)).ToList();
+        }
+
+        SelectedCards = cards;
     }
 
     string GetFactionIcon(CardData sampleCard)
@@ -149,21 +224,4 @@
             _ => ""
         };
     }
-
-    string GetSectionID(CardData sampleCard)
-    {
-        return sampleCard.Faction switch
-        {
-            Faction.Lyonar => "Lyonar",
-            Faction.Songhai => "Songhai",
-            Faction.Vetruvian => "Vetruvian",
-            Faction.Abyssian => "Abyssian",
-            Faction.Magmar => "Magmar",
-            Faction.Vanar => "Vanar",
-            Faction.Neutral => "Neutral",
-            _ => ""
-        };
-    }
-
-
 }

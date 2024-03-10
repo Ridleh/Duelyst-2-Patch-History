@@ -8,5 +8,10 @@
         public const string Epic = "Epic";
         public const string Legendary = "Legendary";
         public const string Mythron = "Mythron";
+
+        public static List<string> ToList =>
+        [
+            Basic, Common, Rare, Epic, Legendary, Mythron
+        ];
     }
 }

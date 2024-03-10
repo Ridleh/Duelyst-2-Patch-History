@@ -112,16 +112,19 @@
     margin-bottom: -60px;
     height: 187px;
     overflow: hidden;
+    image-rendering: pixelated;
 }
 
 .spell {
     width: 110px;
     margin-top: 30px;
+    
 }
 
 .artifact {
     width: 110px;
     margin-top: 30px;
+    image-rendering: pixelated;
 }
 
 .minion {
