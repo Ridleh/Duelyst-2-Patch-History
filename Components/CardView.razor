@@ -57,7 +57,6 @@
     {
         string cardNameFormatted = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(CardData.Name).Replace(" ", "-");
         string url = "https://api.duelyst2.com/" + GetAnimationPath();
-        Console.WriteLine("url: " + url);
         return url;
     }
 

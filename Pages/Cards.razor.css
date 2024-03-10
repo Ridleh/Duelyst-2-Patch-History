@@ -2,9 +2,27 @@
     text-decoration: none;
 }
 
+#background-video {
+    height: 100vh;
+    width: 100vw;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+@media (max-width: 750px) {
+    body {
+        background: url("./Assets/Images/Backgrounds/Duelyst_Cards_Background.png") no-repeat; 
+        background-size: cover;
+    }
+}
+
 .hero-content {
-    background-color: #caedfb;
-    background-image: url("./Assets/Images/Backgrounds/Duelyst_Cards_Background.png");
+    background-color: transparent;
     background-position: 50%;
     background-size: cover;
     max-height: 100vh;
@@ -124,7 +142,6 @@
     font-size: 2rem;
     text-transform: uppercase;
     letter-spacing: 1rem;
-    padding: 4rem;
     background-image: url("./Assets/Images/Backgrounds/card_set_header_bg.jpg");
     background-position-x: 0%;
     background-position-y: 0%;
