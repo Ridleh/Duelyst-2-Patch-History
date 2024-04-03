@@ -109,7 +109,7 @@
       "url": "PatchData\/Legacy.json"
     },
     {
-      "hash": "sha256-eomm\/O0vY8azMgWAZAPS+nGYYhxzxuLYtbMjozmjcIQ=",
+      "hash": "sha256-Q\/snpQIhsbsIPaVqg+KqO5ppaRArndK+hewL6Mz6\/ps=",
       "url": "PatchData\/Patches.json"
     },
     {
@@ -149,11 +149,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-\/Z4T6zYfQcQ93NusDi7JAbq2sG15u4ioJ67HMg4bMgk=",
+      "hash": "sha256-\/Z+mo13YBq7CuQ6\/bxIKRRDawfL4\/aoiotHJNhyF8Bw=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-R+9k6n4cA6CL66KdNgJMaAS8q6l\/HY6pxj\/9C4mvBZE=",
+      "hash": "sha256-EDM79yW2ZsfzPx1dOVQtMmzcekI\/KC0JfmdmPWvVzfg=",
       "url": "_framework\/DuelystPatchNotes.wasm"
     },
     {
@@ -317,5 +317,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "0VI2Wv7v"
+  "version": "06CxbQFp"
 };
