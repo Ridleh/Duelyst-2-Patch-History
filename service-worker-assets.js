@@ -101,6 +101,10 @@
       "url": "PatchData\/0.2.23.json"
     },
     {
+      "hash": "sha256-g03hFTc5ew6WbinBd9UkpJio1YZaodKFJf\/vYQB5Zqc=",
+      "url": "PatchData\/0.2.24.json"
+    },
+    {
       "hash": "sha256-6vAoRdsGw4U7+RMOe+FL88GtLhonFO+sYrVrVF27tIM=",
       "url": "PatchData\/Legacy.json"
     },
@@ -145,11 +149,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-U8e78CY6X7wKFk850N5rQxcPdsZrzjbjvziJX+Orm+o=",
+      "hash": "sha256-\/Z4T6zYfQcQ93NusDi7JAbq2sG15u4ioJ67HMg4bMgk=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-ZAjYT87VM1D9J9kZNZSOf3mErM8WlKwMIODdKJR4D\/8=",
+      "hash": "sha256-R+9k6n4cA6CL66KdNgJMaAS8q6l\/HY6pxj\/9C4mvBZE=",
       "url": "_framework\/DuelystPatchNotes.wasm"
     },
     {
@@ -313,5 +317,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "RHhThhYb"
+  "version": "0VI2Wv7v"
 };
