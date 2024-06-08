@@ -113,11 +113,15 @@
       "url": "PatchData\/0.2.26.json"
     },
     {
+      "hash": "sha256-bOuqJr+C8QvzHWp7qk4ku9XeB5E8N7lAQlTKR2jwG9M=",
+      "url": "PatchData\/0.2.28.json"
+    },
+    {
       "hash": "sha256-6vAoRdsGw4U7+RMOe+FL88GtLhonFO+sYrVrVF27tIM=",
       "url": "PatchData\/Legacy.json"
     },
     {
-      "hash": "sha256-8IDM841E14S+gE0E2qB8DWJjyvM9grQiw8XYKSJFfz0=",
+      "hash": "sha256-LcGS+6yBFFsMKltYbktITMzkuuYrni7OW82eGkCRSxY=",
       "url": "PatchData\/Patches.json"
     },
     {
@@ -157,11 +161,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-aMJg35lnVph\/q2FkmzfauZAoEooKT4E8AUs+7MjZYuo=",
+      "hash": "sha256-BWwvEW+XeBocVKipzoTA48h0fL7rkPQ7Ez7SWmIYBAc=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-zaWCpNcHb9ik3GHeS2L0hwW27lsUZFIwD75H\/PhXwdM=",
+      "hash": "sha256-OnDlFTu6ps2mCO9K4MdXIJxK7\/vzQxxFA3oOu2f0SKQ=",
       "url": "_framework\/DuelystPatchNotes.wasm"
     },
     {
@@ -325,5 +329,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "bC3btMI4"
+  "version": "aGqIZKI1"
 };
