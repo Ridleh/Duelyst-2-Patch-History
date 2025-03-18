@@ -154,7 +154,17 @@
             return;
         }
 
-        FetchedCards = await Http.GetFromJsonAsync<List<CardData>>($"PatchData/{SelectedPatch.Version}.json");
+        string path;
+        if (SelectedPatch.IsLatest)
+        {
+            path = "https://api.duelyst2.com/cards.json";
+        }
+        else
+        {
+            path = $"PatchData/{SelectedPatch.Version}.json";
+        }
+
+        FetchedCards = await Http.GetFromJsonAsync<List<CardData>>(path);
 
         LyonarCards = FetchedCards.Where(card => card.Faction == Faction.Lyonar).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
         SonghaiCards = FetchedCards.Where(card => card.Faction == Faction.Songhai).OrderBy(e => e.CardType != "General").ThenBy(e => e.Mana).ThenBy(e => e.Name).ToList();
