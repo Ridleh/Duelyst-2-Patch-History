@@ -161,11 +161,11 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-EK34DCEjR9DhtpB892I0D+SYbLVrBgBwAZ50JR4Rny8=",
+      "hash": "sha256-Zsi\/WrypTS6pStYJgT+FvzyOzZh9uWlNFW6yiH4sS6A=",
       "url": "_framework\/blazor.boot.json"
     },
     {
-      "hash": "sha256-SBaWq+DykyM80loawx3Qr0CpYEMiiZiNDmVBEcwa25A=",
+      "hash": "sha256-LWuyyz+peGhqYeGKXwH5o5\/Ytws7njm9ga62jZBgBbw=",
       "url": "_framework\/DuelystPatchNotes.wasm"
     },
     {
@@ -329,5 +329,5 @@
       "url": "_content\/MudBlazor\/MudBlazor.min.js"
     }
   ],
-  "version": "ozVgLU46"
+  "version": "KIY0\/pAI"
 };
